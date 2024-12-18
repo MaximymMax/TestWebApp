@@ -1,3 +1,5 @@
+
+
  // Проверяем доступность Telegram.WebApp
 if (window.Telegram.WebApp) {
     const tg = window.Telegram.WebApp;
@@ -41,6 +43,27 @@ if (window.Telegram.WebApp) {
     sendDataBtn.addEventListener("click", () => {
       tg.sendData("Пример данных из WebApp");
       alert("Данные отправлены!");
+    });
+
+    // Флаг для отслеживания состояния (видимы/скрыты)
+    let controlsVisible = true;
+    const toggleButton = document.getElementById("hide-button");
+    // Обработчик нажатия на кнопку
+    toggleButton.addEventListener('click', () => {
+        if (controlsVisible) {
+            // Скрыть кнопки управления
+            Telegram.WebApp.hideHeader();  // Скрывает верхнюю панель
+            Telegram.WebApp.MainButton.hide();  // Скрывает основную кнопку
+            alert("Кнопки скрыты");
+        } else {
+            // Показать кнопки управления
+            Telegram.WebApp.showHeader();  // Показывает верхнюю панель
+            Telegram.WebApp.MainButton.show();  // Показывает основную кнопку
+            alert("Кнопки показаны");
+        }
+        
+        // Переключаем состояние
+        controlsVisible = !controlsVisible;
     });
   
     // Закрытие приложения
