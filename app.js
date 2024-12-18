@@ -52,16 +52,11 @@ if (window.Telegram.WebApp) {
     toggleButton.addEventListener('click', () => {
         if (controlsVisible) {
             // Скрыть кнопки управления
-         try {
-            tg.BottomButton.hide();  // Скрывает основную кнопку
+            tg.MainButton.hide();  // Скрывает основную кнопку
             alert("Кнопки скрыты");
-         }
-         catch (error){
-           alert("Ошибка при скрытии кнопки: " + error.message)
-         }
         } else {
             // Показать кнопки управления
-            tg.BottomButton.show();  // Показывает основную кнопку
+            tg.MainButton.show();  // Показывает основную кнопку
             alert("Кнопки показаны");
         }
         
