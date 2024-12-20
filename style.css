@@ -1,0 +1,106 @@
+/* Простые стили для колбочек */
+.column {
+  width: 40px;
+  height: 140px;
+  margin: 10px;
+  border: 3px solid black;
+  position: relative; /* Для использования абсолютного позиционирования внутри */
+  overflow: hidden; /* Скрываем все, что выходит за границы */
+  background-color: #eaeaea; /* Цвет фона колбочки */
+}
+
+.liquid {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+/* Центрирование заголовков */
+h1, h2 {
+  text-align: center; /* Центрирование текста */
+  margin: 20px 0; /* Отступы сверху и снизу */
+  font-family: 'Arial', sans-serif; /* Шрифт для заголовков */
+}
+
+h1 {
+  font-size: 36px; /* Размер шрифта для h1 */
+  color: #2c3e50; /* Цвет текста */
+  font-weight: bold; /* Полужирный текст */
+  text-transform: uppercase; /* Все буквы в верхнем регистре */
+  letter-spacing: 2px; /* Расстояние между буквами */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+h2 {
+  font-size: 24px; /* Размер шрифта для h2 */
+  color: #3498db; /* Цвет текста */
+  font-weight: normal; /* Обычный вес шрифта */
+  font-style: italic; /* Курсив */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Легкая тень */
+}
+
+#OuterSection {
+  width: 100%;
+  height: 650px;
+  background-color: #333;
+  display: flex; /* Flexbox контейнер */
+  justify-content: center; /* Центрируем по горизонтали */
+  align-items: center; /* Центрируем по вертикали */
+  position: relative;
+}
+
+#SectionGame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Добавим стиль для подсветки колбочек при их выборе */
+.column.selected {
+  border-color: red; /* Цвет границы колбочки при выборе */
+}
+
+#BackButton {
+  position: absolute; /* Абсолютное позиционирование кнопки */
+  bottom: 20px; /* Отступ от нижней границы внешней секции */
+  left: 50%; /* Центрируем кнопку по горизонтали */
+  transform: translateX(-50%); /* Корректировка для точного центрирования */
+  border-radius: 10px; /* Скругленные углы */
+  height: 40px;
+  width: 120px;
+  font-size: 16px; /* Размер текста на кнопке */
+  background-color: red; /* Темно-серый фон */
+  color: white; /* Белый текст */
+  border: none; /* Убираем бордер */
+  border-radius: 5px; /* Скругленные углы кнопки */
+  cursor: pointer; /* Курсор при наведении */
+}
+
+#BackButton:hover {
+  background-color: #777; /* Светлее при наведении */
+}
+
+#FooterSection {
+  width: 100%; /* Полная ширина секции */
+  height: 70px; /* Фиксированная высота */
+  background-color: #555; /* Цвет фона */
+  display: flex; /* Используем Flexbox */
+}
+
+.FooterButton {
+  flex: 1; /* Каждая кнопка занимает равное место */
+  background-color: #777; /* Цвет кнопок */
+  border: none; /* Убираем границу */
+  color: white; /* Цвет текста */
+  font-size: 16px; /* Размер текста */
+  cursor: pointer; /* Курсор при наведении */
+}
+
+.FooterButton:first-child {
+  border-right: 1px solid #444; /* Разделительная линия справа у первой кнопки */
+}
+
+.FooterButton:hover {
+  background-color: #666; /* Цвет кнопки при наведении */
+}
