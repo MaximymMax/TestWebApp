@@ -33,7 +33,8 @@ const stateLevel1 = [
   
 
 function UserInfo() {
-  
+
+    alert(window.Telegram.WebApp.version);
     // Проверяем, существует ли tg
     if (!tg) {
         return [1, stateLevel1, []];  // Если tg нет, сразу возвращаем массив с null
