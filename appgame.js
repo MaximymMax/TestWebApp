@@ -19,6 +19,10 @@ BackButton.addEventListener('click', pourLiquidBack);
 
 // Функция отрисовки игры
 function render() {
+
+  namelevel = document.getElementById("NameLevel");
+  namelevel.textContent = 'Уровень ' + window.Telegram.WebApp.version;
+  
   const gameContainer = document.getElementById('SectionGame');
   gameContainer.innerHTML = ''; // Очистить контейнер
 
