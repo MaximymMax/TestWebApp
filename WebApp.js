@@ -49,7 +49,7 @@ function UserInfo() {
         } else {
             level = Number(levelInfo);
         }
-
+                alert(tg.version);
         // Получаем массив массивов по ключу "ListOfFlasks"
         tg.cloudStorage.getItem("ListOfFlasks", (err, listOfFlasks) => {
             let flasks = null;
@@ -79,7 +79,6 @@ function UserInfo() {
                         solutions = null; // Ошибка парсинга, вставляем null
                     }
                 }
-                alert(tg.version);
                 // Возвращаем результат как массив: [уровень, массивы, массивы]
                 return([level, flasks, solutions]);
             });
