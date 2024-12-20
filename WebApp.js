@@ -1,7 +1,5 @@
 const tg = window.Telegram?.WebApp;
 
-alert(tg.version);
-
 // Инициализация начального состояния игры
 const stateLevel1 = [
     [1, 1, 1, 2],   // Колбочка 1 (красный)
@@ -41,6 +39,8 @@ function UserInfo() {
         return [1, stateLevel1, []];  // Если tg нет, сразу возвращаем массив с null
     }
 
+    alert(tg.version);
+    
     // Проверяем наличие ключа "LevelInfo"
     tg.cloudStorage.getItem("LevelInfo", (err, levelInfo) => {
         let level = null;
