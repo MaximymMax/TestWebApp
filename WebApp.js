@@ -1,5 +1,7 @@
 const tg = window.Telegram?.WebApp;
 
+alert(tg.version);
+
 // Инициализация начального состояния игры
 const stateLevel1 = [
     [1, 1, 1, 2],   // Колбочка 1 (красный)
