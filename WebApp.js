@@ -38,8 +38,6 @@ function UserInfo() {
     if (!tg) {
         return [1, stateLevel1, []];  // Если tg нет, сразу возвращаем массив с null
     }
-
-    alert(tg.version);
     
     // Проверяем наличие ключа "LevelInfo"
     tg.cloudStorage.getItem("LevelInfo", (err, levelInfo) => {
@@ -81,7 +79,7 @@ function UserInfo() {
                         solutions = null; // Ошибка парсинга, вставляем null
                     }
                 }
-
+                alert(tg.version);
                 // Возвращаем результат как массив: [уровень, массивы, массивы]
                 return([level, flasks, solutions]);
             });
