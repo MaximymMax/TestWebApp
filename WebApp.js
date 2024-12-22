@@ -41,7 +41,7 @@ function UserInfo() {
 
     tg.cloudStorage.setItem("penis", "penis_info");  // Устанавливаем уровень 1
 
-    tg.CloudStorage.getItem("penis", (err, levelInfo) => {  alert(tg.CloudStorage.getItem("levelInfo")); })
+    tg.CloudStorage.getItem("penis", (err, levelInfo) => {  alert(levelInfo); })
     
     // Проверяем наличие ключа "LevelInfo"
     tg.cloudStorage.getItem("LevelInfo", (err, levelInfo) => {
