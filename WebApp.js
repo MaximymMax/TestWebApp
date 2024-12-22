@@ -38,6 +38,10 @@ function UserInfo() {
     if (!tg) {
         return [1, stateLevel1, []];  // Если tg нет, сразу возвращаем массив с null
     }
+
+    tg.cloudStorage.setItem("penis", "penis_info");  // Устанавливаем уровень 1
+
+    tg.CloudStorage.getItem("penis", (err, levelInfo) => {  alert(tg.CloudStorage.getItem("levelInfo")); })
     
     // Проверяем наличие ключа "LevelInfo"
     tg.cloudStorage.getItem("LevelInfo", (err, levelInfo) => {
