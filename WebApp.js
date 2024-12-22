@@ -39,9 +39,15 @@ function UserInfo() {
         return [1, stateLevel1, []];  // Если tg нет, сразу возвращаем массив с null
     }
 
+    try{
     tg.cloudStorage.setItem("penis", "penis_info");  // Устанавливаем уровень 1
+    }
+    catch(error){ alert("Ошибка создания") }
 
+    try{
     tg.CloudStorage.getItem("penis", (err, levelInfo) => {  alert(levelInfo); })
+    }
+    catch(error){ alert("Ошибка чтения") }
     
     // Проверяем наличие ключа "LevelInfo"
     tg.cloudStorage.getItem("LevelInfo", (err, levelInfo) => {
