@@ -1,3 +1,21 @@
+/* Общий стиль для страницы */
+body, html {
+  margin: 0;
+  padding: 0;
+  min-height: 790px; /* Минимальная высота страницы */
+  max-height: 900px; /* Максимальная высота страницы */
+  height: 100vh; /* Высота равна высоте окна браузера */
+  display: flex;
+  flex-direction: column; /* Вертикальная организация */
+}
+
+/* Верхняя часть страницы */
+h1, #NameLevel {
+  margin: 0;
+  padding: 10px 0;
+  text-align: center;
+}
+
 /* Простые стили для колбочек */
 .column {
   width: 40px;
@@ -18,12 +36,12 @@
 /* Центрирование заголовков */
 h1, h2 {
   text-align: center; /* Центрирование текста */
-  margin: 20px 0; /* Отступы сверху и снизу */
+  margin: 10px 0; /* Отступы сверху и снизу */
   font-family: 'Arial', sans-serif; /* Шрифт для заголовков */
 }
 
 h1 {
-  font-size: 36px; /* Размер шрифта для h1 */
+  font-size: 30px; /* Размер шрифта для h1 */
   color: #2c3e50; /* Цвет текста */
   font-weight: bold; /* Полужирный текст */
   text-transform: uppercase; /* Все буквы в верхнем регистре */
@@ -40,20 +58,33 @@ h2 {
 }
 
 #OuterSection {
-  width: 100%;
-  height: 650px;
+  flex: 1; /* Растягивается, чтобы занять все доступное пространство */
   background-color: #333;
-  display: flex; /* Flexbox контейнер */
-  justify-content: center; /* Центрируем по горизонтали */
-  align-items: center; /* Центрируем по вертикали */
+  display: flex; /* Используем Flexbox */
+  justify-content: center; /* Центрируем содержимое по горизонтали */
+  align-items: center; /* Центрируем содержимое по вертикали */
   position: relative;
+  padding: 5px 0; /* Уменьшенные отступы сверху и снизу */
+  box-sizing: border-box; /* Учитываем padding в высоте */
+  min-height: 300px; /* Минимальная высота */
 }
 
 #SectionGame {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: flex; /* Flexbox внутри SectionGame */
+  flex-direction: column; /* Вертикальное расположение */
+  justify-content: center; /* Центрируем содержимое внутри */
   align-items: center;
+  max-height: calc(100% - 60px); /* Ограничиваем высоту с учетом отступов */
+  width: 100%; /* Полная ширина */
+  overflow: hidden; /* Скрываем выходящее за пределы */
+  transform: scale(1); /* Базовое масштабирование */
+  transform-origin: center; /* Точка масштабирования — центр */
+}
+
+#SectionGame * {
+  max-width: 100%; /* Ограничиваем ширину всех вложенных элементов */
+  max-height: 100%; /* Ограничиваем высоту всех вложенных элементов */
+  overflow: hidden; /* Скрываем содержимое, выходящее за границы */
 }
 
 /* Добавим стиль для подсветки колбочек при их выборе */
@@ -62,23 +93,22 @@ h2 {
 }
 
 #BackButton {
-  position: absolute; /* Абсолютное позиционирование кнопки */
-  bottom: 20px; /* Отступ от нижней границы внешней секции */
-  left: 50%; /* Центрируем кнопку по горизонтали */
-  transform: translateX(-50%); /* Корректировка для точного центрирования */
-  border-radius: 10px; /* Скругленные углы */
+  position: absolute; /* Абсолютное позиционирование */
+  bottom: 10px; /* Фиксируем кнопку от нижнего края */
+  left: 50%; /* Центрируем по горизонтали */
+  transform: translateX(-50%); /* Точное центрирование */
   height: 40px;
   width: 120px;
-  font-size: 16px; /* Размер текста на кнопке */
-  background-color: red; /* Темно-серый фон */
-  color: white; /* Белый текст */
-  border: none; /* Убираем бордер */
-  border-radius: 5px; /* Скругленные углы кнопки */
-  cursor: pointer; /* Курсор при наведении */
+  background-color: red;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 #BackButton:hover {
-  background-color: #777; /* Светлее при наведении */
+  background-color: #777;
 }
 
 #FooterSection {
