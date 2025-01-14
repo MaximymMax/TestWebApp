@@ -1,14 +1,21 @@
-
-info = UserInfo();
-level = info[0];
-state = info[1];
-HistoryOfMoves = info[2]
+let level = 0;
+let state = null;
+let HistoryOfMoves = null;
+SetValues();
 
 function SetValues(){
-  info = UserInfo();
-  level = info[0];
-  state = info[1];
-  HistoryOfMoves = info[2]
+  fetchData()
+    .then(result => {
+        level = result[0];
+        state = result[1];
+        HistoryOfMoves = result[2]
+
+        render();
+    })
+    .catch(error => {
+        // Обработка ошибок
+        console.error(error.message);
+    });
 }
 
 // Переменная для хранения выбранной колбочки
@@ -19,6 +26,9 @@ BackButton.addEventListener('click', pourLiquidBack);
 
 // Функция отрисовки игры
 function render() {
+
+  namelevel = document.getElementById("NameLevel")
+  namelevel.textContent = 'Уровень ' + level;
   
   const gameContainer = document.getElementById('SectionGame');
   gameContainer.innerHTML = ''; // Очистить контейнер
@@ -69,7 +79,7 @@ function getColor(colorId) {
 }
 
 // Функция выбора колбочки
-function selectColumn(colIndex) {
+async function selectColumn(colIndex) {
   if (selectedColumn === null) {
     if(state[colIndex].length == 0)
     return;
@@ -80,21 +90,12 @@ function selectColumn(colIndex) {
       if(pourLiquid(selectedColumn, colIndex)) // Переливаем жидкость, если выбрана другая колбочка
       selectedColumn = null; // Сбросить выбор
 
-      SaveInfo("ListOfFlasks", state);
-      SaveInfo("ListOfSolutions", HistoryOfMoves);
-
       if(LevelCompletionCheck())
       {
         unhighlightColumn(colIndex); // Убираем подсветку
 
-        level++;
-        if(level == 4)
-        level = 1;
-
-        namelevel = document.getElementById("NameLevel")
-        namelevel.textContent = 'Уровень ' + level;
-        NewLevel(level);
-        SetValues();
+        await NewLevel(level)
+        await SetValues();
         render();
         return;
       }
@@ -135,14 +136,17 @@ function pourLiquid(fromIndex, toIndex) {
   const liquid = fromColumn.pop(); // Убираем жидкость с исходной колбочки
   toColumn.push(liquid); // Добавляем жидкость в целевую колбочку
 
-  HistoryOfMoves.push([fromIndex, toIndex])
- 
+ if (!Array.isArray(HistoryOfMoves) || HistoryOfMoves.length === 0) {
+    HistoryOfMoves = []; // Инициализация как массив массивов
+  }
+  HistoryOfMoves.push([fromIndex, toIndex]);
+  
   if(fromColumn.length!=0 && toColumn.length!=5 && (toColumn.length == 0 || fromColumn[fromColumn.length-1] == toColumn[toColumn.length-1])){
     pourLiquid(fromIndex, toIndex)
     return true;
   }
 
-
+  SaveData(1, state, HistoryOfMoves) 
   render(); // Обновляем отображение игры
   return true;
 }
@@ -166,9 +170,6 @@ function pourLiquidBack(){
     pourLiquidBack();
     return;
   }
-
-  SaveInfo("ListOfFlasks", state);
-  SaveInfo("ListOfSolutions", HistoryOfMoves);
 
   render();
 }
@@ -196,6 +197,3 @@ function LevelCompletionCheck()
 
   return true; // Если все проверки пройдены, возвращаем true
 }
-
-// Вызов функции отрисовки
-render();
