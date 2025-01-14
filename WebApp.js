@@ -1,4 +1,9 @@
 const tg = window.Telegram?.WebApp;
+let UserID = 6161616161619;
+if(tg!=null && window.Telegram.WebApp.initDataUnsafe.user?.id!=null)
+    UserID = window.Telegram.WebApp.initDataUnsafe.user.id;
+
+const url = "https://kolbochkigameazure20250106140617.azurewebsites.net/api/Function1?code=r_DK3hIZOZ7nRm187lNvB8q5r_3Q1Uzx06vua4JVaCM4AzFuQH74Uw%3D%3D";
 
 // Инициализация начального состояния игры
 const stateLevel1 = [
@@ -30,38 +35,108 @@ const stateLevel1 = [
     [], 
     []              
   ];
-  
 
-function UserInfo() {
 
-    // Проверяем, существует ли tg
-    if (!tg) {
-        return [1, stateLevel1, []];  // Если tg нет, сразу возвращаем массив с null
+  async function fetchData() {
+    const url = 'https://kolbochkigameazure20250106140617.azurewebsites.net/api/Function1?code=KEtqDwni_nnIIe0t3gw4IeqTeyeTudX4n4WxLetw9eprAzFuGucYWw%3D%3D'; // replace with your actual URL
+
+    const requestData = {
+        requestName: "UserInfo", // Название запроса
+        UserID: UserID
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Проверяем структуру данных
+            //alert("Успех "+ JSON.stringify(data));
+            console.log('Успех', data);
+            return [data.Lvl, JSON.parse(data.State), data.History ? JSON.parse(data.History) : null]; // History может быть null
+    } catch (error) {
+        //alert(`Error: ${error.message}`);
+        console.error('Error during fetch or processing:', error);
+    }
+}
+
+async function SaveData(Level, State, History) {
+    const url = 'https://kolbochkigameazure20250106140617.azurewebsites.net/api/Function1?code=KEtqDwni_nnIIe0t3gw4IeqTeyeTudX4n4WxLetw9eprAzFuGucYWw%3D%3D'; // replace with your actual URL
+
+    console.log('Данные'+JSON.stringify(Level)+' '+JSON.stringify(State)+' '+JSON.stringify(History), Level);
+    const requestData = {
+        requestName: "SaveUserInfo", // Название запроса
+        UserID: UserID,
+        Lvl: JSON.stringify(Level),
+        State: JSON.stringify(State),
+        History: JSON.stringify(History)
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        });
+
+    } catch (error) {
+        //alert(`Error: ${error.message}`);
+        console.error('Error during fetch or processing:', error);
+    }
+}
+
+async function NewLevel(Level){
+    const requestData = {
+        requestName: "NewLevel", // Название запроса
+        UserID: UserID,
+        Lvl: JSON.stringify(Level),
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        });
+        console.log('Новый уровень '+Level);
+
+    } catch (error) {
+        //alert(`Error: ${error.message}`);
+        console.error('Error during fetch or processing:', error);
     }
 
-    try{
-    tg.cloudStorage.setItem("penis", "penis_info");  // Устанавливаем уровень 1
-    }
-    catch(error){ alert("Ошибка создания") }
+}
 
-    try{
-    tg.CloudStorage.getItem("penis", (err, levelInfo) => {  alert(levelInfo); })
-    }
-    catch(error){ alert("Ошибка чтения") }
-    
+function UserInfo1() {
+
     // Проверяем наличие ключа "LevelInfo"
-    tg.cloudStorage.getItem("LevelInfo", (err, levelInfo) => {
+    tg.CloudStorage.getItem("LevelInfo", (err, levelInfo) => {
         let level = null;
         if (err || !levelInfo || isNaN(Number(levelInfo))) {
             // Если LevelInfo пустое или ошибка, создаем нового пользователя
+            alert(tg.version);
             createNewUser();
             level = 1; // Устанавливаем уровень по умолчанию
         } else {
             level = Number(levelInfo);
         }
-                alert(tg.version);
+
         // Получаем массив массивов по ключу "ListOfFlasks"
-        tg.cloudStorage.getItem("ListOfFlasks", (err, listOfFlasks) => {
+        tg.CloudStorage.getItem("ListOfFlasks", (err, listOfFlasks) => {
             let flasks = null;
             if (!(err || !listOfFlasks)) {
                 try {
@@ -75,7 +150,7 @@ function UserInfo() {
             }
 
             // Получаем второй массив массивов по ключу "ListOfSolutions"
-            tg.cloudStorage.getItem("ListOfSolutions", (err, listOfSolutions) => {
+            tg.CloudStorage.getItem("ListOfSolutions", (err, listOfSolutions) => {
                 let solutions = null;
                 if (err || !listOfSolutions) {
                     solutions = null; // Если ошибка или данных нет, вставляем null
@@ -89,6 +164,7 @@ function UserInfo() {
                         solutions = null; // Ошибка парсинга, вставляем null
                     }
                 }
+
                 // Возвращаем результат как массив: [уровень, массивы, массивы]
                 return([level, flasks, solutions]);
             });
@@ -96,7 +172,7 @@ function UserInfo() {
     });
 }
 
-window.UserInfo = UserInfo;
+window.fetchData = fetchData;
 
 function createNewUser() {
 
@@ -106,39 +182,3 @@ function createNewUser() {
         tg.cloudStorage.setItem("ListOfSolutions", JSON.stringify([[], []]));  // Пустой массив массивов для решений
     }
 }
-
-window.createNewUser = createNewUser;
-
-function SaveInfo(Name, Value){
-    if(tg){
-        if(Name == "LevelInfo")
-            tg.cloudStorage.setItem(Name, Value);
-        else if(Name == "ListOfFlasks" || Name == "ListOfSolutions")
-            tg.cloudStorage.setItem(Name, JSON.stringify(Value));
-    }
-}
-
-window.SaveInfo = SaveInfo;
-
-function NewLevel(level){
-
-    if(!tg)
-    {
-        if(level == 1){
-            tg.cloudStorage.setItem("LevelInfo", "1");
-            tg.cloudStorage.setItem("ListOfFlasks", JSON.stringify(stateLevel1)); 
-        }
-        else if(level == 2){
-            tg.cloudStorage.setItem("LevelInfo", "2");
-            tg.cloudStorage.setItem("ListOfFlasks", JSON.stringify(stateLevel2)); 
-        }
-        else if(level == 3){
-            tg.cloudStorage.setItem("LevelInfo", "3");
-            tg.cloudStorage.setItem("ListOfFlasks", JSON.stringify(stateLevel3)); 
-        }
-        tg.cloudStorage.setItem("ListOfSolutions", JSON.stringify([]));
-    }
-
-}
-
-window.NewLevel = NewLevel;
