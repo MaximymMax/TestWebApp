@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Telegram Web App Example</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 </head>
 <body>
+  <header class="header">
   <h1>Игра Колбочки</h1>
-  <h1 id = "NameLevel">Уровень 1</h2>
+  <h2 id = "NameLevel">Уровень 1</h2>
+  </header>
   <div id="OuterSection">
   <div id="SectionGame"></div>
-  <button id="BackButton"></button>
+  <div id="SectionButtons">
+    <button id="BackButton"></button>
+    <button id="ResetLevel"></button>
+  </div>
   </div>
   <div id="FooterSection">
     <button class="FooterButton">Игра</button>
