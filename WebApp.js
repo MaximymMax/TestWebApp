@@ -174,11 +174,3 @@ function UserInfo1() {
 
 window.fetchData = fetchData;
 
-function createNewUser() {
-
-    if (tg) {
-        tg.cloudStorage.setItem("LevelInfo", "1");  // Устанавливаем уровень 1
-        tg.cloudStorage.setItem("ListOfFlasks", JSON.stringify(stateLevel1));  // Пустой массив массивов для флаконов
-        tg.cloudStorage.setItem("ListOfSolutions", JSON.stringify([[], []]));  // Пустой массив массивов для решений
-    }
-}
