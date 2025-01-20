@@ -24,12 +24,34 @@ let selectedColumn = null;
 const BackButton = document.getElementById('BackButton');
 BackButton.addEventListener('click', pourLiquidBack);
 
+const ResetButton = document.getElementById('ResetLevel');
+ResetButton.addEventListener('click', ResetLevel);
+
+const lowerLiquidSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34.65 28.65" style="width: 35px; height: 28px;">
+  <path style="fill: red;" d="M0,0H34.65a0,0,0,0,1,0,0V12.65a16,16,0,0,1-16,16H16a16,16,0,0,1-16-16V0A0,0,0,0,1,0,0Z"/>
+</svg>
+`;
+
+const liquidSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34.65 28" style="width: 34px; height: 28px;">
+  <rect style="fill: #ff0;" width="34.65" height="28"/>
+</svg>
+`;
+
+// Основной SVG для колбочки
+const svgMarkup = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 152" style="fill: none; stroke: #666; stroke-width: 2px; width: 42px; height: 152px;">
+  <path d="M509.59,925.74H472.85a1.71,1.71,0,0,0-1.63,1.79v4.9a1.72,1.72,0,0,0,1.63,1.8h.69v122c0,10.77,7.92,19.51,17.68,19.51h0c9.77,0,17.68-8.74,17.68-19.51v-122h.69a1.72,1.72,0,0,0,1.63-1.8v-4.9A1.71,1.71,0,0,0,509.59,925.74Z" transform="translate(-470.22 -924.74)"/>
+</svg>
+`;
+
 // Функция отрисовки игры
 function render() {
 
-  namelevel = document.getElementById("NameLevel")
+  namelevel = document.getElementById("NameLevel");
   namelevel.textContent = 'Уровень ' + level;
-  
+
   const gameContainer = document.getElementById('SectionGame');
   gameContainer.innerHTML = ''; // Очистить контейнер
 
@@ -50,20 +72,46 @@ function render() {
 
       const columnDiv = document.createElement('div');
       columnDiv.classList.add('column');
+      columnDiv.style.width = '42px'; // Ширина SVG
+      columnDiv.style.height = '152px'; // Высота SVG
+      columnDiv.style.margin = '10px'; // Расстояние между колбочками
+      columnDiv.innerHTML = svgMarkup; // Вставляем SVG колбочки
       columnDiv.addEventListener('click', () => selectColumn(columnIndex));
 
-      // Для каждой колбочки рисуем "жидкость"
+      // Создаём контейнер для жидкостей под колбочкой
+      const liquidContainer = document.createElement('div');
+      liquidContainer.style.position = 'absolute';
+      liquidContainer.style.bottom = '2px'; // Смещаем жидкости к низу SVG
+      liquidContainer.style.left = '4px'; // Центрируем внутри SVG
+      liquidContainer.style.width = '34px'; // Совпадает с шириной жидкостей
+
+      if (selectedColumn === columnIndex) {
+        const svg = columnDiv.querySelector('svg');
+        if (svg) {
+          svg.style.filter = 'drop-shadow(0 0 4px rgba(255, 0, 0, 3)) drop-shadow(0 0 12px rgba(255, 0, 0, 0.8))';
+        }
+      }
+      // Добавляем жидкости в контейнер
       state[columnIndex].forEach((color, index) => {
-        const liquidHeight = 140 / 5; // Высота каждой жидкости (200px высота колбочки, 4 слоя)
         const liquidDiv = document.createElement('div');
-        liquidDiv.classList.add('liquid');
-        liquidDiv.style.backgroundColor = getColor(color);
-        liquidDiv.style.height = `${liquidHeight}px`; // Устанавливаем высоту слоя
-        liquidDiv.style.position = 'absolute'; // Абсолютное позиционирование
-        liquidDiv.style.bottom = `${index * liquidHeight}px`; // Смещаем слой вверх на высоту предыдущих
-        columnDiv.appendChild(liquidDiv);
+        //liquidDiv.style.position = 'absolute';
+        liquidDiv.style.height = '27px'; // Высота одного слоя жидкости
+        const reversedIndex = state[columnIndex].length - 1 - index;
+        if (index === state[columnIndex].length - 1) {
+          // Если это нижняя жидкость, вставляем нижний SVG
+          liquidDiv.innerHTML = lowerLiquidSvg.replace('red', getColor(state[columnIndex][reversedIndex])); // Меняем цвет на текущий
+        } else {
+          // Для остальных жидкостей вставляем обычный SVG
+          liquidDiv.innerHTML = liquidSvg.replace('#ff0', getColor(state[columnIndex][reversedIndex])); // Меняем цвет на текущий
+        }
+
+        // Смещаем жидкость по вертикали
+        liquidDiv.style.bottom = `${0}px`; // Смещаем жидкости на высоту слоя (28px)
+        liquidDiv.style.zIndex = state[columnIndex].length - index; // Устанавливаем Z-индекс
+        liquidContainer.appendChild(liquidDiv);
       });
 
+      columnDiv.appendChild(liquidContainer);
       rowDiv.appendChild(columnDiv);
     }
 
@@ -95,8 +143,7 @@ async function selectColumn(colIndex) {
         unhighlightColumn(colIndex); // Убираем подсветку
 
         await NewLevel(level)
-        await SetValues();
-        render();
+        SetValues();
         return;
       }
     }
@@ -110,13 +157,12 @@ async function selectColumn(colIndex) {
 // Функция подсветки колбочки
 function highlightColumn(colIndex) {
   const columns = document.querySelectorAll('.column');
-  columns[colIndex].classList.add('selected'); // Добавляем класс для подсветки
+  render();
 }
 
 // Функция убирает подсветку
 function unhighlightColumn(colIndex) {
-  const columns = document.querySelectorAll('.column');
-  columns[colIndex].classList.remove('selected'); // Убираем класс подсветки
+  render();
 }
 
 // Функция переливания жидкости из одной колбочки в другую
@@ -146,12 +192,12 @@ function pourLiquid(fromIndex, toIndex) {
     return true;
   }
 
-  SaveData(1, state, HistoryOfMoves) 
+  SaveData(level, state, HistoryOfMoves) 
   render(); // Обновляем отображение игры
   return true;
 }
 
-function pourLiquidBack(){
+async function pourLiquidBack(){
   const move = HistoryOfMoves[HistoryOfMoves.length-1];
   const toColumn = state[move[0]];
   const fromColumn = state[move[1]];
@@ -171,7 +217,17 @@ function pourLiquidBack(){
     return;
   }
 
-  render();
+  await SaveData(level, state, HistoryOfMoves) 
+  await render();
+}
+async function ResetLevel() {
+  if (level == 1) {
+    await NewLevel(1);  // Ждем завершения NewLevel
+  } else {
+    await NewLevel(level - 1);  // Ждем завершения NewLevel
+  }
+
+  SetValues();  // Эта функция будет вызвана только после завершения NewLevel
 }
 
 function LevelCompletionCheck()
